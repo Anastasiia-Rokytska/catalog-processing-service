@@ -1,0 +1,48 @@
+package com.arokytska.catalog.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Getter
+@Setter
+@Validated
+@ConfigurationProperties(prefix = "file-processing")
+public class FileProcessingProperties {
+    @NotBlank
+    private String inputDir;
+    @NotBlank
+    private String processedDir;
+    @NotBlank
+    private String failedDir;
+    @NotBlank
+    private String cron;
+    @Positive
+    private int threadPoolSize;
+    @Positive
+    private int maxExportAgeDays;
+
+    @PostConstruct
+    public void init() {
+        try {
+            Files.createDirectories(Path.of(inputDir));
+            Files.createDirectories(Path.of(processedDir));
+            Files.createDirectories(Path.of(failedDir));
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not create working directories", e);
+        }
+        log.info("inputDir - {}, processedDir - {}, failedDir - {}, cron - {}, threadPoolSize - {}, maxExportAgeDays - {}",
+                inputDir, processedDir, failedDir, cron, threadPoolSize, maxExportAgeDays);
+    }
+}
