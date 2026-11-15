@@ -4,11 +4,11 @@
 Requirements: Java 21 and Docker (Docker Desktop or another engine).
 
 ```bash
-docker compose up -d        # PostgreSQL 16 on localhost:5432, wait until it is "healthy"
-docker compose ps
+docker-compose up -d        # PostgreSQL 16 on localhost:5432, wait until it is "healthy"
+docker-compose ps
 ./mvnw spring-boot:run      # drop files into data/input-folder
 ./mvnw test                 # starts its own PostgreSQL with Testcontainers
-docker compose down         # stop the DB (add -v to also delete the data volume)
+docker-compose down         # stop the DB (add -v to also delete the data volume)
 ```
 
 - `spring-boot-docker-compose` (dev only) also starts `docker-compose.yml` automatically on `spring-boot:run`,
